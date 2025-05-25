@@ -1,2 +1,3 @@
 # typescript-microservices
-Environament to work with typescript, nest.js and microservices
+
+Environment to work with TypeScript, nest.js and microservices
