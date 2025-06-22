@@ -1,0 +1,62 @@
+services:
+  order-service:
+    build:
+      context: .
+      dockerfile: apps/order-service/Dockerfile
+    container_name: order-service-container
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+      # - /usr/src/app/node_modules
+    ports:
+      - "4000:${SERVER_PORT_ORDER_SERVICE}"
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  invoice-service:
+    build:
+      context: .
+      dockerfile: apps/invoice-service/Dockerfile
+    container_name: invoice-service-container
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+      # - /usr/src/app/node_modules
+    ports:
+      - "5000:${SERVER_PORT_INVOICE_SERVICE}"
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./docker/data/mongodata:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+
+networks:
+  default:
+    name: app-network
+    driver: bridge

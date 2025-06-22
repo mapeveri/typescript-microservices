@@ -1,0 +1,26 @@
+name: App CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '22.x'
+      - name: Install Dependencies
+        run: npm install
+      - name: Run linter check
+        run: npm run linter-check
+      - name: Run format code check
+        run: npm run format-code-check
+      - name: Run unit tests
+        run: npm run test:unit
