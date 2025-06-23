@@ -15,8 +15,7 @@ export abstract class DomainEvent {
       eventId === null || eventId === undefined || eventId.trim() === ''
         ? crypto.randomUUID()
         : eventId;
-    this.occurredOn =
-      occurredOn ?? new Date().toISOString().replace('T', ' ').split('.')[0];
+    this.occurredOn = occurredOn ?? new Date().toISOString();
   }
 
   abstract domainEventName(): string;
