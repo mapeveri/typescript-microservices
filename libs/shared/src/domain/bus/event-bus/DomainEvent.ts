@@ -1,4 +1,4 @@
-import * as crypto from 'node:crypto';
+import { Uuid } from '@app/shared/domain/Uuid';
 
 export abstract class DomainEvent {
   public readonly aggregateId: string;
@@ -13,7 +13,7 @@ export abstract class DomainEvent {
     this.aggregateId = aggregateId;
     this.eventId =
       eventId === null || eventId === undefined || eventId.trim() === ''
-        ? crypto.randomUUID()
+        ? Uuid.random().toString()
         : eventId;
     this.occurredOn = occurredOn ?? new Date().toISOString();
   }
