@@ -8,7 +8,7 @@ import { MongoDriver } from '@mikro-orm/mongodb';
 import { entitySchemas } from './infrastructure/persistence/mikro-orm/entities';
 import { controllers } from './app/controllers';
 import { commands } from './application/command';
-import { readModels } from './infrastructure/persistence/mikro-orm/read-models';
+import { services } from './infrastructure/persistence/mikro-orm/services';
 import { repositories } from './infrastructure/persistence/mikro-orm/repositories';
 import { SharedModule } from '@app/shared';
 
@@ -57,6 +57,6 @@ import { SharedModule } from '@app/shared';
     }),
   ],
   controllers,
-  providers: [...subscribers, ...readModels, ...repositories, ...commands],
+  providers: [...subscribers, ...services, ...repositories, ...commands],
 })
 export class InvoiceServiceModule {}

@@ -4,11 +4,11 @@ import InvalidArgumentException from '@app/shared/domain/exception/InvalidArgume
 import { UploadInvoiceCommand } from '../../../../../src/application/command/upload-invoice/UploadInvoiceCommand';
 import { UploadInvoiceCommandMother } from './UploadInvoiceCommandMother';
 import { OrderDoesNotExistsException } from '@app/shared/domain/order/OrderDoesNotExistsException';
-import { OrderViewFinderMock } from '../../../domain/invoice/OrderViewFinderMock';
+import { OrderFinderMock } from '../../../domain/invoice/OrderFinderMock';
 import { InvalidInvoiceFileException } from '../../../../../src/domain/invoice/InvalidInvoiceFileException';
 import { InvoiceAlreadyExistsException } from '../../../../../src/domain/invoice/InvoiceAlreadyExistsException';
 import { InvoiceRepositoryMock } from '../../../domain/invoice/InvoiceRepositoryMock';
-import { OrderViewMother } from '../../../domain/invoice/OrderViewMother';
+import { OrderMother } from '../../../domain/invoice/OrderMother';
 import { InvoiceMother } from '../../../domain/invoice/InvoiceMother';
 import { Invoice } from '../../../../../src/domain/invoice/Invoice';
 import { FileStorageMock } from '../../../../../../../libs/shared/test/unit/domain/storage/FileStorageMock';
@@ -17,13 +17,13 @@ import { InvoiceWasUploadedEvent } from '../../../../../src/domain/invoice/Invoi
 
 describe('Given a CreateOrderCommandHandler to handle', () => {
   let handler: UploadInvoiceCommandHandler;
-  let orderViewFinder: OrderViewFinderMock;
+  let orderFinder: OrderFinderMock;
   let invoiceRepository: InvoiceRepositoryMock;
   let fileStorage: FileStorageMock;
   let eventBus: EventBusMock;
 
   const prepareDependencies = () => {
-    orderViewFinder = new OrderViewFinderMock();
+    orderFinder = new OrderFinderMock();
     invoiceRepository = new InvoiceRepositoryMock();
     fileStorage = new FileStorageMock();
     eventBus = new EventBusMock();
@@ -31,7 +31,7 @@ describe('Given a CreateOrderCommandHandler to handle', () => {
 
   const initHandler = () => {
     handler = new UploadInvoiceCommandHandler(
-      orderViewFinder,
+      orderFinder,
       invoiceRepository,
       fileStorage,
       eventBus,
@@ -39,7 +39,7 @@ describe('Given a CreateOrderCommandHandler to handle', () => {
   };
 
   const clean = () => {
-    orderViewFinder.clean();
+    orderFinder.clean();
     invoiceRepository.clean();
     fileStorage.clean();
     eventBus.clean();
@@ -195,10 +195,10 @@ describe('Given a CreateOrderCommandHandler to handle', () => {
 
       function startScenario() {
         command = UploadInvoiceCommandMother.random();
-        const order = OrderViewMother.fromUploadInvoiceCommand(command);
+        const order = OrderMother.fromUploadInvoiceCommand(command);
         invoiceExpected = InvoiceMother.fromUploadInvoiceCommand(command);
 
-        orderViewFinder.add(order);
+        orderFinder.add(order);
         fileStorage.add(command.invoiceFile);
       }
 

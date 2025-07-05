@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { OrderView } from '../../../../src/domain/invoice/OrderView';
+import { Order } from '../../../../src/domain/invoice/Order';
 import { OrderStatusType } from '@app/shared/domain/order/OrderStatusType';
 import { UploadInvoiceCommand } from '../../../../src/application/command/upload-invoice/UploadInvoiceCommand';
 
@@ -9,22 +9,22 @@ interface OrderViewProps {
   status?: string;
 }
 
-export class OrderViewMother {
-  static random(props?: OrderViewProps): OrderView {
+export class OrderMother {
+  static random(props?: OrderViewProps): Order {
     const { id, sellerId, status } = props ?? {};
 
     const values = Object.values(OrderStatusType);
     const randomValue = values[Math.floor(Math.random() * values.length)];
 
-    return <OrderView>{
+    return <Order>{
       id: id ?? faker.string.uuid(),
       sellerId: sellerId ?? faker.string.uuid(),
       status: status ?? randomValue.toString(),
     };
   }
 
-  static fromUploadInvoiceCommand(command: UploadInvoiceCommand): OrderView {
-    return OrderViewMother.random({
+  static fromUploadInvoiceCommand(command: UploadInvoiceCommand): Order {
+    return OrderMother.random({
       id: command.id,
       sellerId: command.sellerId,
     });

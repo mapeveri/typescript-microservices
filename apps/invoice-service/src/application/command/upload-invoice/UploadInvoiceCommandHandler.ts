@@ -3,12 +3,9 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InvoiceId } from '../../../domain/invoice/InvoiceId';
 import { OrderId } from '../../../domain/invoice/OrderId';
 import { SellerId } from '../../../domain/invoice/SellerId';
-import {
-  ORDER_VIEW_FINDER,
-  OrderViewFinder,
-} from '../../../domain/invoice/OrderViewFinder';
+import { ORDER_FINDER, OrderFinder } from '../../../domain/invoice/OrderFinder';
 import { OrderDoesNotExistsException } from '@app/shared/domain/order/OrderDoesNotExistsException';
-import { OrderView } from '../../../domain/invoice/OrderView';
+import { Order } from '../../../domain/invoice/Order';
 import { InvalidInvoiceFileException } from '../../../domain/invoice/InvalidInvoiceFileException';
 import { Inject } from '@nestjs/common';
 import { InvoiceAlreadyExistsException } from '../../../domain/invoice/InvoiceAlreadyExistsException';
@@ -28,7 +25,7 @@ export class UploadInvoiceCommandHandler
   implements ICommandHandler<UploadInvoiceCommand>
 {
   constructor(
-    @Inject(ORDER_VIEW_FINDER) private readonly orderFinder: OrderViewFinder,
+    @Inject(ORDER_FINDER) private readonly orderFinder: OrderFinder,
     @Inject(INVOICE_REPOSITORY)
     private readonly invoiceRepository: InvoiceRepository,
     @Inject(FILE_STORAGE) private readonly fileStorage: FileStorage,
@@ -72,7 +69,7 @@ export class UploadInvoiceCommandHandler
   private async ensureOrderExists(
     orderId: OrderId,
     sellerId: SellerId,
-  ): Promise<OrderView> {
+  ): Promise<Order> {
     const order = await this.orderFinder.find(orderId, sellerId);
     if (!order) {
       throw new OrderDoesNotExistsException(orderId.toString());

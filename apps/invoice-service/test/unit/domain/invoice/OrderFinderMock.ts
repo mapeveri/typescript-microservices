@@ -1,16 +1,16 @@
-import { OrderView } from '../../../../src/domain/invoice/OrderView';
-import { OrderViewFinder } from '../../../../src/domain/invoice/OrderViewFinder';
+import { Order } from '../../../../src/domain/invoice/Order';
+import { OrderFinder } from '../../../../src/domain/invoice/OrderFinder';
 import { OrderId } from '../../../../src/domain/invoice/OrderId';
 import { SellerId } from '../../../../src/domain/invoice/SellerId';
 
-export class OrderViewFinderMock implements OrderViewFinder {
-  private toReturn: OrderView[] = [];
+export class OrderFinderMock implements OrderFinder {
+  private toReturn: Order[] = [];
 
   constructor() {
     this.toReturn = [];
   }
 
-  add(order: OrderView): void {
+  add(order: Order): void {
     this.toReturn.push(order);
   }
 
@@ -18,10 +18,7 @@ export class OrderViewFinderMock implements OrderViewFinder {
     this.toReturn = [];
   }
 
-  async find(
-    _id: OrderId,
-    _sellerId: SellerId,
-  ): Promise<OrderView | undefined> {
+  async find(_id: OrderId, _sellerId: SellerId): Promise<Order | undefined> {
     return this.toReturn.length > 0
       ? Promise.resolve(this.toReturn[0])
       : Promise.resolve(undefined);

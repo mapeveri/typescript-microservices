@@ -1,6 +1,6 @@
 import { OrderStatusType } from '@app/shared/domain/order/OrderStatusType';
 
-export type OrderView = {
+export type Order = {
   id: string;
   sellerId: string;
   status: OrderStatusType;
