@@ -4,7 +4,7 @@ import InvalidArgumentException from '@app/shared/domain/exception/InvalidArgume
 import { UploadInvoiceCommand } from '../../../../../src/application/command/upload-invoice/UploadInvoiceCommand';
 import { UploadInvoiceCommandMother } from './UploadInvoiceCommandMother';
 import { OrderDoesNotExistsException } from '@app/shared/domain/order/OrderDoesNotExistsException';
-import { OrderFinderMock } from '../../../domain/invoice/OrderFinderMock';
+import { OrderRepositoryMock } from '../../../domain/invoice/OrderRepositoryMock';
 import { InvalidInvoiceFileException } from '../../../../../src/domain/invoice/InvalidInvoiceFileException';
 import { InvoiceAlreadyExistsException } from '../../../../../src/domain/invoice/InvoiceAlreadyExistsException';
 import { InvoiceRepositoryMock } from '../../../domain/invoice/InvoiceRepositoryMock';
@@ -17,13 +17,13 @@ import { InvoiceWasUploadedEvent } from '../../../../../src/domain/invoice/Invoi
 
 describe('Given a CreateOrderCommandHandler to handle', () => {
   let handler: UploadInvoiceCommandHandler;
-  let orderFinder: OrderFinderMock;
+  let orderRepository: OrderRepositoryMock;
   let invoiceRepository: InvoiceRepositoryMock;
   let fileStorage: FileStorageMock;
   let eventBus: EventBusMock;
 
   const prepareDependencies = () => {
-    orderFinder = new OrderFinderMock();
+    orderRepository = new OrderRepositoryMock();
     invoiceRepository = new InvoiceRepositoryMock();
     fileStorage = new FileStorageMock();
     eventBus = new EventBusMock();
@@ -31,7 +31,7 @@ describe('Given a CreateOrderCommandHandler to handle', () => {
 
   const initHandler = () => {
     handler = new UploadInvoiceCommandHandler(
-      orderFinder,
+      orderRepository,
       invoiceRepository,
       fileStorage,
       eventBus,
@@ -39,7 +39,7 @@ describe('Given a CreateOrderCommandHandler to handle', () => {
   };
 
   const clean = () => {
-    orderFinder.clean();
+    orderRepository.clean();
     invoiceRepository.clean();
     fileStorage.clean();
     eventBus.clean();
@@ -198,7 +198,7 @@ describe('Given a CreateOrderCommandHandler to handle', () => {
         const order = OrderMother.fromUploadInvoiceCommand(command);
         invoiceExpected = InvoiceMother.fromUploadInvoiceCommand(command);
 
-        orderFinder.add(order);
+        orderRepository.add(order);
         fileStorage.add(command.invoiceFile);
       }
 

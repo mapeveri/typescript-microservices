@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OrderFinder } from '../../../../domain/invoice/OrderFinder';
+import { OrderRepository } from '../../../../domain/invoice/OrderRepository';
 import { OrderId } from '../../../../domain/invoice/OrderId';
 import { Order } from '../../../../domain/invoice/Order';
 import { SellerId } from '../../../../domain/invoice/SellerId';
@@ -7,7 +7,7 @@ import { EntityManager } from '@mikro-orm/mongodb';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class MikroOrmOrderFinder implements OrderFinder {
+export class MikroOrmOrderFinder implements OrderRepository {
   constructor(
     private readonly em: EntityManager,
     private readonly configService: ConfigService,

@@ -1,9 +1,9 @@
 import { Order } from '../../../../src/domain/invoice/Order';
-import { OrderFinder } from '../../../../src/domain/invoice/OrderFinder';
+import { OrderRepository } from '../../../../src/domain/invoice/OrderRepository';
 import { OrderId } from '../../../../src/domain/invoice/OrderId';
 import { SellerId } from '../../../../src/domain/invoice/SellerId';
 
-export class OrderFinderMock implements OrderFinder {
+export class OrderRepositoryMock implements OrderRepository {
   private toReturn: Order[] = [];
 
   constructor() {
